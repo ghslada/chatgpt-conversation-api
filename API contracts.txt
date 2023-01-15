@@ -1,0 +1,36 @@
+
+* required
+
+POST REQUEST:
+
+    {
+        *"message": "Implemente o algoritmo de busca binária em uma lista na linguagem Javascript",
+        "conversationId": "add4ca07-99bd-4096-87cd-036ccf8423e5",
+        "messageId": "126be69c-a6a4-464b-bb41-c850c1866ed0"
+    }
+
+POST RESPONSE: 
+
+IF SUCCESS = TRUE IS EXPECTED THIS:
+
+    {
+        *success=true,
+        "userMessage": {
+            *"message": "Hello world!",
+            "conversationId": "",
+            "parentMessageId": ""
+        },
+        "chatGPTResponse": {
+            *"response": "",
+            "conversationId": "",
+            "messageId": ""
+        }
+    }
+
+IF SUCCESS = FALSE IS EXPECTED THIS:
+
+    {
+        *success=false,
+        "errorMessage": "",
+        "displayMessage": ""
+    }

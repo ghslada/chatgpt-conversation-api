@@ -1,16 +1,32 @@
+import { appendFile } from "fs";
+import { ErrorResponse } from "../models/ErrorResponseModel.js";
+import { SuccessResponse } from "../models/SuccessResponseModel.js";
+
 export const MessageRouter = (router, chatGPTAPI) => {
 
     router.post('/message', async (req, res) => {
 
-        const message = req.body.message==null? 'Sugira uma mensagem de erro dizendo que não foi possível ler a mensagem do usuário pois não foi encontrado o atributo message no corpo da requisição': req.body.message;
+        // const instruction = req.body.instruction==null? null : req.body.instruction; 
 
-        console.log('Server received the message: ', message);
+        // const message = req.body.message==null? 'Sugira uma mensagem de erro dizendo que não foi possível ler a mensagem do usuário pois não foi encontrado o atributo message no corpo da requisição': req.body.message;
+
+        const userMessage = req.body;
+
+        console.log('Server received the message: \n' + JSON.stringify(userMessage, null, 4));
 
         try {
-
-            const resp = await chatGPTAPI.sendMessage(message);
-            console.log(resp);
-            res.json( { succes: true, chatGPTResponse: resp, userMessage: message } );
+            let message = userMessage.message;
+            while(String(message).includes('\t')||String(message).includes('\r')||String(message).includes('\n')) {
+                String(message).replace('\r', '');
+                String(message).replace('\t', '');
+                String(message).replace('\n', '');
+            }
+            userMessage.message = message;
+            const chatGPTResponse = await chatGPTAPI.sendMessage(userMessage);
+            console.log(chatGPTResponse);
+            const successResponse = new SuccessResponse(userMessage, chatGPTResponse);
+            console.log(successResponse);
+            res.json( successResponse.toJSON() );
 
 
             // .then( res => {
@@ -25,10 +41,14 @@ export const MessageRouter = (router, chatGPTAPI) => {
             // });
             
         } catch (error) {
-            console.log(error);
-            res.json( {succes: false, errorMessage: error} );
 
-          }
+            console.log(error);
+            const errorResponse = new ErrorResponse(error, 'Desculpe, não foi possível processar a resposta da sua mensagem');
+            res.json( errorResponse.toJSON() );
+
+        }
+
+        
 
         // .then( response => {
 
