@@ -79,16 +79,16 @@ class ChatGPTClass {
             }
             return error;
           }
-
-          console.log(response);
-
+          
           if ( ! 'response' in response ) {
-            error.response = 'A inteligência artificial está conversando com muitas pessoas ao mesmo tempo e atingiu sua capacidade máxima, por favor tente novamente mais tarde.';
+            response.response = 'A inteligência artificial está conversando com muitas pessoas ao mesmo tempo e atingiu sua capacidade máxima, por favor tente novamente mais tarde.';
           }
-
+          
           if ( String(response.response).length < 2 ) {
             response.response = 'A inteligência artificial está conversando com muitas pessoas ao mesmo tempo e atingiu sua capacidade máxima, por favor tente novamente mais tarde.';
           }
+          
+          console.log(response);
 
           return response;
         } else {
