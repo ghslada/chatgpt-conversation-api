@@ -19,6 +19,8 @@ MessageRouter(router, chatGPTAPI);
 
 app.use(router);
 
+// import { whatsapp } from './services/WhatsAppWeb.js';
+
 chatGPTAPI.init().then(
 
     con => {
@@ -29,7 +31,6 @@ chatGPTAPI.init().then(
 
         // WHATSAPP SERVICE
         // IMPORT OUTSIDE FUNCTION then 
-        // import { whatsapp } from './services/WhatsAppWeb.js';
 
         // whatsapp.on("ready", () => {
         //     console.log("Ready to accept messages");
@@ -47,12 +48,20 @@ chatGPTAPI.init().then(
             console.log("Erro to start server on port 3000: ",error);
             else
             console.log("Server started on port: ", PORT_NUMBER);
-        })
+        });
 
     }
 
 )
     .catch(async err => {
         console.log(err);
-        await chatGPTAPI.retryInit();
+        await chatGPTAPI.retryInit()
+        if ( chatGPTAPI.authenticated ) {
+            app.listen(PORT_NUMBER, function(error){
+                if (error)
+                console.log("Erro to start server on port 3000: ",error);
+                else
+                console.log("Server started on port: ", PORT_NUMBER);
+            });
+        }
     });

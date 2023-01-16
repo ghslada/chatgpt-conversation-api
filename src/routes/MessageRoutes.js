@@ -25,6 +25,7 @@ export const MessageRouter = (router, chatGPTAPI) => {
             const chatGPTResponse = await chatGPTAPI.sendMessage(userMessage);
             console.log(chatGPTResponse);
             const successResponse = new SuccessResponse(userMessage, chatGPTResponse);
+            // {"statusCode":429,"statusText":""}
             console.log(successResponse);
             res.json( successResponse.toJSON() );
 
@@ -48,7 +49,7 @@ export const MessageRouter = (router, chatGPTAPI) => {
 
         }
 
-        
+
 
         // .then( response => {
 

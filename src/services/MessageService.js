@@ -27,7 +27,7 @@ class MessageServiceClass {
                         } else {
                             const conversation = this.conversations[message._data.id.remote];
                             console.log('Sending message to ChatGPT: ' + { ...conversation, message: message.body });
-                            const response = await this.chatGPT.sendMessage(message.body, conversation);
+                            const response = await this.chatGPT.sendMessage(conversation);
                             this.updateConversation(message._data.id.remote, response);
                             this.sendWhatsAppMessage(response.response);
                         }
@@ -50,7 +50,18 @@ class MessageServiceClass {
                                 const conversation = this.conversations[message._data.id.remote];
                                 conversation['message'] = message.body;
                                 console.log('Sending message to ChatGPT: ' + JSON.stringify(conversation));
-                                const response = await this.chatGPT.sendMessage(conversation);
+                                try {
+
+                                    const response = await this.chatGPT.sendMessage(conversation);
+                                    this.sendWhatsAppMessage(response.response);
+
+                                } catch (error) {
+
+                                    this.sendWhatsAppMessage('A inteligência artificial está conversando com muitas pessoas ao mesmo tempo e atingiu sua capacidade máxima, por favor tente novamente mais tarde.');
+
+                                }
+                                // 'A inteligência artificial está conversando com muitas pessoas ao mesmo tempo e atingiu sua capacidade máxima, por favor tente novamente mais tarde.'
+
                                 this.updateConversation(message._data.id.remote, response);
                                 this.sendWhatsAppMessage(response.response);
                             }
@@ -81,8 +92,8 @@ class MessageServiceClass {
     }
 
     isNewConversation(chatId) {
-        console.log('Conversations: '+JSON.stringify(this.conversations));
-        if ( chatId in this.conversations ) {
+        console.log('Conversations: ' + JSON.stringify(this.conversations));
+        if (chatId in this.conversations) {
             return false;
         } else {
             return true;

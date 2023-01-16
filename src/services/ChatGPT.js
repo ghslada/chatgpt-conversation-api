@@ -18,6 +18,7 @@ class ChatGPTClass {
   chatGPT = new ChatGPTAPIBrowser(configuration);
   #instruction = '.\nInstrução: responda retornando somente uma String sem quebras de linhas.';
   retriesCount = 0;
+  authenticated = false;
 
   chats = {};
 
@@ -25,7 +26,8 @@ class ChatGPTClass {
 
     const authenticated = await this.chatGPT.getIsAuthenticated();
     if (!authenticated) {
-      this.chatGPT.resetThread();
+      this.authenticated = false;
+      // this.chatGPT.resetThread();
       this.init()
       .then( ok => {
         console.log('Reinicializing ChatGPT...')
@@ -72,10 +74,22 @@ class ChatGPTClass {
             }
           } catch (error) {
             console.log(error);
+            if ( ! 'response' in error ) {
+              error.response = 'A inteligência artificial está conversando com muitas pessoas ao mesmo tempo e atingiu sua capacidade máxima, por favor tente novamente mais tarde.';
+            }
             return error;
           }
 
           console.log(response);
+
+          if ( ! 'response' in response ) {
+            error.response = 'A inteligência artificial está conversando com muitas pessoas ao mesmo tempo e atingiu sua capacidade máxima, por favor tente novamente mais tarde.';
+          }
+
+          if ( String(response.response).length < 2 ) {
+            response.response = 'A inteligência artificial está conversando com muitas pessoas ao mesmo tempo e atingiu sua capacidade máxima, por favor tente novamente mais tarde.';
+          }
+
           return response;
         } else {
           throw 'The key message expect a value of the String type';
@@ -99,6 +113,7 @@ class ChatGPTClass {
 
   async init() {
     await this.chatGPT.initSession();
+    this.authenticated = true;
     // await this.chatGPT.refreshSession();
   }
 
@@ -106,7 +121,8 @@ class ChatGPTClass {
     if (this.retriesCount < 3) {
       await this.init()
         .then(res => {
-          console.log('ChatGPT connected')
+          console.log('ChatGPT connected');
+          this.authenticated = true;
         })
         .catch(async err => {
           this.retriesCount += 1;
