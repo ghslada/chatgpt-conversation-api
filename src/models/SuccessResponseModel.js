@@ -7,7 +7,7 @@ class SuccessResponseModel {
     constructor(userMessage, chatGPTResponse) {
         if (typeof userMessage === 'object') {
             this.userMessage = userMessage;
-            console.log('User message: '+userMessage);
+            console.log('User message: '+JSON.stringify(userMessage, null, 4));
         }
         else {
             throw 'Constructor expected a object as first argument';
@@ -15,7 +15,7 @@ class SuccessResponseModel {
         if (typeof chatGPTResponse === 'object') {
             this.success=true;
             this.chatGPTResponse = chatGPTResponse;
-            console.log('ChatGPT message: '+chatGPTResponse);
+            console.log('ChatGPT message: '+JSON.stringify(chatGPTResponse, null, 4));
         }
         else {
             throw 'Constructor expected a object as second argument';

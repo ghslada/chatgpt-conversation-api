@@ -36,8 +36,8 @@ class ChatGPTClass {
         this.retryInit();
       });
     }
-    const isChatPage = this.chatGPT.isChatPage;
-    if (isChatPage) {
+    // const isChatPage = this.chatGPT.isChatPage;
+    // if (isChatPage) {
 
       const userMessageKeys = Object.keys(userMessageBody);
 
@@ -48,6 +48,7 @@ class ChatGPTClass {
           throw 'The key instruction expect a value of the String type';
         }
       }
+      
       if (userMessageKeys.includes('message')) {
         if (typeof userMessageBody.message === 'string') {
 
@@ -97,9 +98,9 @@ class ChatGPTClass {
       } else {
         throw 'Expected the key message in the request body';
       }
-    } else {
-      console.log('Please resolve the CAPTCHA and click next');
-    }
+    // } else {
+    //   console.log('Please resolve the CAPTCHA and click next');
+    // }
 
   }
 

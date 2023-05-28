@@ -19,7 +19,7 @@ MessageRouter(router, chatGPTAPI);
 
 app.use(router);
 
-// import { whatsapp } from './services/WhatsAppWeb.js';
+import { whatsapp } from './services/WhatsAppWeb.js';
 
 chatGPTAPI.init().then(
 
@@ -32,23 +32,23 @@ chatGPTAPI.init().then(
         // WHATSAPP SERVICE
         // IMPORT OUTSIDE FUNCTION then 
 
-        // whatsapp.on("ready", () => {
-        //     console.log("Ready to accept messages");
-        //     const messageService = new MessageService(whatsapp, chatGPTAPI);
-        //     messageService.start();
+        whatsapp.on("ready", () => {
+            console.log("Ready to accept messages");
+            const messageService = new MessageService(whatsapp, chatGPTAPI);
+            messageService.start();
 
-        // });
+        });
 
         // API SERVICE
         // WHATSAPP SERVICE COULD BE STARTED USING THE API WITH SOME TYPE OF EVENT EMMITER 
         // TO HAVE MORE CONTROL IF THE SERVICE IS UP 
         
-        app.listen(PORT_NUMBER, function(error){
-            if (error)
-            console.log("Erro to start server on port 3000: ",error);
-            else
-            console.log("Server started on port: ", PORT_NUMBER);
-        });
+        // app.listen(PORT_NUMBER, function(error){
+        //     if (error)
+        //     console.log("Erro to start server on port 3000: ",error);
+        //     else
+        //     console.log("Server started on port: ", PORT_NUMBER);
+        // });
 
     }
 
